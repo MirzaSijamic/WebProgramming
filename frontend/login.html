@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #4c566a; 
+            color: white; 
+        }
+
+        .card {
+            background-color: #3b4252;
+            border: 1px solid #444;
+        }
+
+        .card-header, .card-footer {
+            background-color: #2e3440; 
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: #5e81ac; 
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color:  #81a1c1;
+        }
+
+        .form-control {
+            background-color: #4c566a; 
+            color: whitesmoke;
+            border: 1px solid white;
+        }
+
+        .form-control:focus {
+            background-color: #606d87; 
+            border-color: white;
+            color: whitesmoke;
+        }
+
+        .container {
+            max-width: 460px;
+            margin-top: 50px;
+        }
+
+        .other-link {
+            color: #88c0d0;
+        }
+
+
+        .back-arrow {
+            display: block;
+            margin: 20px auto;
+            color: #ffffff;
+            font-size: 20px;
+            text-decoration: none;
+            background-color: #3b4252;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            outline: 3px solid #ffffff;
+}
+
+        .back-arrow:hover {
+            color: #ffffff;
+            background-color: #333333;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Form -->
+        <div class="card mb-4">
+            <div class="card-header text-center">
+                <h4>Login</h4>
+            </div>
+            <div class="card-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="loginEmail" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="loginEmail" placeholder="Enter your email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="loginPassword" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" onclick="myFunction()">Login</button>
+                </form>
+            </div>
+            <div class="card-footer text-center">
+                <p>Don't have an account? <a href="register.html" class="other-link">Register here</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back arrow link placed below the form -->
+    <a href="index.html" class="back-arrow">
+        <i class="bi bi-arrow-left"></i>
+    </a>
+
+    <!-- Bootstrap 5 JS -->
+    <script>
+        // Set the background image dynamically
+        document.body.style.backgroundImage = `url('backgrounds/${randomImage}')`;
+        document.body.style.backgroundSize = '300px auto '; // Only scale width
+        function myFunction() {
+            window.location.href = 'index.html';
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
