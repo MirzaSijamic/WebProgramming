@@ -30,7 +30,16 @@ $(document).ready(function () {
 
   app.route({
     view: "home",
-    load: "./test.html",
+    load: "test.html",
+    onCreate: function() {
+      console.log('home onCreate: template is being loaded');
+    },
+    onReady: function() {
+      console.log('home onReady: template loaded and inserted');
+      // ensure any leftover preloader inside templates is removed
+      var $p = $('#preloder');
+      if($p.length) { $p.find('.loader').fadeOut(); $p.delay(100).fadeOut('fast', function(){ $p.remove(); }); }
+    }
   });
 
   // run app
