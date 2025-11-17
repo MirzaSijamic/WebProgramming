@@ -17,5 +17,7 @@ class TrackDao extends BaseDao {
 
         return $this->query_unique($query, ['spotify_track_id' => $spotifyTrackId]);
     }
+
+    
 }
 ?>
