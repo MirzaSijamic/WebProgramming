@@ -3,8 +3,7 @@
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
-Flight::group('/api/auth', function() {
-
+class AuthRoutes {
     /**
      * @OA\Post(
      *     path="/api/auth/register",
@@ -46,11 +45,9 @@ Flight::group('/api/auth', function() {
      *     )
      * )
      */
-    Flight::route("POST /auth/register", function () {
+    public static function registerUser() {
         $data = Flight::request()->data->getData();
-
         $response = Flight::auth_service()->register($data);
-    
         if ($response['success']) {
             Flight::json([
                 'message' => 'User registered successfully',
@@ -59,8 +56,8 @@ Flight::group('/api/auth', function() {
         } else {
             Flight::halt(500, $response['error']);
         }
-    });
-    
+    }
+
     /**
      * @OA\Post(
      *      path="/api/auth/login",
@@ -80,11 +77,9 @@ Flight::group('/api/auth', function() {
      *      )
      * )
      */
-    Flight::route('POST /login', function() {
+    public static function loginUser() {
         $data = Flight::request()->data->getData();
-
         $response = Flight::auth_service()->login($data);
-    
         if ($response['success']) {
             Flight::json([
                 'message' => 'User logged in successfully',
@@ -93,7 +88,12 @@ Flight::group('/api/auth', function() {
         } else {
             Flight::halt(500, $response['error']);
         }
-    }); 
+    }
+}
+
+Flight::group('/api/auth', function() {
+    Flight::route("POST /auth/register", [AuthRoutes::class, 'registerUser']);
+    Flight::route('POST /login', [AuthRoutes::class, 'loginUser']);
 });
 
 

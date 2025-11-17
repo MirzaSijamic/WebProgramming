@@ -1,7 +1,6 @@
 <?php
 
-Flight::group('/api/playlists', function() {
-
+class PlaylistRoutes {
     /**
      * @OA\Get(
      *     path="/api/playlists",
@@ -23,10 +22,10 @@ Flight::group('/api/playlists', function() {
      *     )
      * )
      */
-    Flight::route("GET /", function () {
+    public static function getAll() {
         $playlists = Flight::playlist_service()->get_all();
         Flight::json($playlists);
-    });
+    }
 
     /**
      * @OA\Get(
@@ -53,14 +52,14 @@ Flight::group('/api/playlists', function() {
      *     )
      * )
      */
-    Flight::route("GET /@id", function ($id) {
+    public static function getById($id) {
         $response = Flight::playlist_service()->get_by_id($id);
         if ($response['success']) {
             Flight::json($response['data']);
         } else {
             Flight::halt(404, $response['error']);
         }
-    });
+    }
 
     /**
      * @OA\Get(
@@ -86,14 +85,14 @@ Flight::group('/api/playlists', function() {
      *     )
      * )
      */
-    Flight::route("GET /user/@userId", function ($userId) {
+    public static function getByUserId($userId) {
         $response = Flight::playlist_service()->get_by_user_id($userId);
         if ($response['success']) {
             Flight::json($response['data']);
         } else {
             Flight::halt(500, $response['error']);
         }
-    });
+    }
 
     /**
      * @OA\Post(
@@ -123,7 +122,7 @@ Flight::group('/api/playlists', function() {
      *     )
      * )
      */
-    Flight::route("POST /", function () {
+    public static function create() {
         $data = Flight::request()->data->getData();
         $response = Flight::playlist_service()->add($data);
         
@@ -132,7 +131,7 @@ Flight::group('/api/playlists', function() {
         } else {
             Flight::halt(400, $response['error']);
         }
-    });
+    }
 
     /**
      * @OA\Put(
@@ -167,7 +166,7 @@ Flight::group('/api/playlists', function() {
      *     )
      * )
      */
-    Flight::route("PUT /@id", function ($id) {
+    public static function update($id) {
         $data = Flight::request()->data->getData();
         $response = Flight::playlist_service()->update($data, $id);
         
@@ -176,7 +175,7 @@ Flight::group('/api/playlists', function() {
         } else {
             Flight::halt(404, $response['error']);
         }
-    });
+    }
 
     /**
      * @OA\Delete(
@@ -202,7 +201,7 @@ Flight::group('/api/playlists', function() {
      *     )
      * )
      */
-    Flight::route("DELETE /@id", function ($id) {
+    public static function delete($id) {
         $response = Flight::playlist_service()->delete($id);
         
         if ($response['success']) {
@@ -210,7 +209,7 @@ Flight::group('/api/playlists', function() {
         } else {
             Flight::halt(404, $response['error']);
         }
-    });
+    }
 
     /**
      * @OA\Post(
@@ -243,7 +242,7 @@ Flight::group('/api/playlists', function() {
      *     )
      * )
      */
-    Flight::route("POST /@id/tracks/@trackId", function ($id, $trackId) {
+    public static function addTrack($id, $trackId) {
         $response = Flight::playlist_service()->add_track($id, $trackId);
         
         if ($response['success']) {
@@ -251,7 +250,7 @@ Flight::group('/api/playlists', function() {
         } else {
             Flight::halt(400, $response['error']);
         }
-    });
+    }
 
     /**
      * @OA\Delete(
@@ -280,7 +279,7 @@ Flight::group('/api/playlists', function() {
      *     )
      * )
      */
-    Flight::route("DELETE /@id/tracks/@trackId", function ($id, $trackId) {
+    public static function removeTrack($id, $trackId) {
         $response = Flight::playlist_service()->remove_track($id, $trackId);
         
         if ($response['success']) {
@@ -288,7 +287,7 @@ Flight::group('/api/playlists', function() {
         } else {
             Flight::halt(400, $response['error']);
         }
-    });
+    }
 
     /**
      * @OA\Post(
@@ -317,7 +316,7 @@ Flight::group('/api/playlists', function() {
      *     )
      * )
      */
-    Flight::route("POST /@id/tags/@tagId", function ($id, $tagId) {
+    public static function addTag($id, $tagId) {
         $response = Flight::playlist_service()->add_tag($id, $tagId);
         
         if ($response['success']) {
@@ -325,7 +324,7 @@ Flight::group('/api/playlists', function() {
         } else {
             Flight::halt(400, $response['error']);
         }
-    });
+    }
 
     /**
      * @OA\Delete(
@@ -354,7 +353,7 @@ Flight::group('/api/playlists', function() {
      *     )
      * )
      */
-    Flight::route("DELETE /@id/tags/@tagId", function ($id, $tagId) {
+    public static function removeTag($id, $tagId) {
         $response = Flight::playlist_service()->remove_tag($id, $tagId);
         
         if ($response['success']) {
@@ -362,7 +361,20 @@ Flight::group('/api/playlists', function() {
         } else {
             Flight::halt(400, $response['error']);
         }
-    });
+    }
+}
+
+Flight::group('/api/playlists', function() {
+    Flight::route("GET /", [PlaylistRoutes::class, 'getAll']);
+    Flight::route("GET /@id", [PlaylistRoutes::class, 'getById']);
+    Flight::route("GET /user/@userId", [PlaylistRoutes::class, 'getByUserId']);
+    Flight::route("POST /", [PlaylistRoutes::class, 'create']);
+    Flight::route("PUT /@id", [PlaylistRoutes::class, 'update']);
+    Flight::route("DELETE /@id", [PlaylistRoutes::class, 'delete']);
+    Flight::route("POST /@id/tracks/@trackId", [PlaylistRoutes::class, 'addTrack']);
+    Flight::route("DELETE /@id/tracks/@trackId", [PlaylistRoutes::class, 'removeTrack']);
+    Flight::route("POST /@id/tags/@tagId", [PlaylistRoutes::class, 'addTag']);
+    Flight::route("DELETE /@id/tags/@tagId", [PlaylistRoutes::class, 'removeTag']);
 });
 
 ?>

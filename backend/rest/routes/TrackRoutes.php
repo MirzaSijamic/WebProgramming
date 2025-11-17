@@ -1,7 +1,6 @@
 <?php
 
-Flight::group('/api/tracks', function() {
-
+class TrackRoutes {
     /**
      * @OA\Get(
      *     path="/api/tracks",
@@ -19,10 +18,10 @@ Flight::group('/api/tracks', function() {
      *     )
      * )
      */
-    Flight::route("GET /", function () {
+    public static function getAll() {
         $tracks = Flight::track_service()->get_all();
         Flight::json($tracks);
-    });
+    }
 
     /**
      * @OA\Get(
@@ -49,14 +48,14 @@ Flight::group('/api/tracks', function() {
      *     )
      * )
      */
-    Flight::route("GET /@id", function ($id) {
+    public static function getById($id) {
         $response = Flight::track_service()->get_by_id($id);
         if ($response['success']) {
             Flight::json($response['data']);
         } else {
             Flight::halt(404, $response['error']);
         }
-    });
+    }
 
     /**
      * @OA\Get(
@@ -83,14 +82,14 @@ Flight::group('/api/tracks', function() {
      *     )
      * )
      */
-    Flight::route("GET /spotify/@spotifyTrackId", function ($spotifyTrackId) {
+    public static function getBySpotifyId($spotifyTrackId) {
         $response = Flight::track_service()->get_by_spotify_id($spotifyTrackId);
         if ($response['success']) {
             Flight::json($response['data']);
         } else {
             Flight::halt(404, $response['error']);
         }
-    });
+    }
 
     /**
      * @OA\Post(
@@ -123,7 +122,7 @@ Flight::group('/api/tracks', function() {
      *     )
      * )
      */
-    Flight::route("POST /", function () {
+    public static function create() {
         $data = Flight::request()->data->getData();
         $response = Flight::track_service()->add($data);
         
@@ -132,7 +131,7 @@ Flight::group('/api/tracks', function() {
         } else {
             Flight::halt(400, $response['error']);
         }
-    });
+    }
 
     /**
      * @OA\Put(
@@ -168,7 +167,7 @@ Flight::group('/api/tracks', function() {
      *     )
      * )
      */
-    Flight::route("PUT /@id", function ($id) {
+    public static function update($id) {
         $data = Flight::request()->data->getData();
         $response = Flight::track_service()->update($data, $id);
         
@@ -177,14 +176,14 @@ Flight::group('/api/tracks', function() {
         } else {
             Flight::halt(404, $response['error']);
         }
-    });
+    }
 
     /**
      * @OA\Delete(
      *     path="/api/tracks/{id}",
      *     summary="Delete a track",
      *     description="Delete a track by ID",
-     *     tags={"playlists"},
+     *     tags={"tracks"},
      *     security={{"bearerAuth": {}}},
      *     @OA\Parameter(
      *         name="id",
@@ -203,7 +202,7 @@ Flight::group('/api/tracks', function() {
      *     )
      * )
      */
-    Flight::route("DELETE /@id", function ($id) {
+    public static function delete($id) {
         $response = Flight::track_service()->delete($id);
         
         if ($response['success']) {
@@ -211,7 +210,16 @@ Flight::group('/api/tracks', function() {
         } else {
             Flight::halt(404, $response['error']);
         }
-    });
+    }
+}
+
+Flight::group('/api/tracks', function() {
+    Flight::route("GET /", [TrackRoutes::class, 'getAll']);
+    Flight::route("GET /@id", [TrackRoutes::class, 'getById']);
+    Flight::route("GET /spotify/@spotifyTrackId", [TrackRoutes::class, 'getBySpotifyId']);
+    Flight::route("POST /", [TrackRoutes::class, 'create']);
+    Flight::route("PUT /@id", [TrackRoutes::class, 'update']);
+    Flight::route("DELETE /@id", [TrackRoutes::class, 'delete']);
 });
 
 ?>

@@ -1,7 +1,6 @@
 <?php
 
-Flight::group('/api/tags', function() {
-
+class TagRoutes {
     /**
      * @OA\Get(
      *     path="/api/tags",
@@ -19,10 +18,10 @@ Flight::group('/api/tags', function() {
      *     )
      * )
      */
-    Flight::route("GET /", function () {
+    public static function getAll() {
         $tags = Flight::tag_service()->get_all();
         Flight::json($tags);
-    });
+    }
 
     /**
      * @OA\Get(
@@ -49,14 +48,14 @@ Flight::group('/api/tags', function() {
      *     )
      * )
      */
-    Flight::route("GET /@id", function ($id) {
+    public static function getById($id) {
         $response = Flight::tag_service()->get_by_id($id);
         if ($response['success']) {
             Flight::json($response['data']);
         } else {
             Flight::halt(404, $response['error']);
         }
-    });
+    }
 
     /**
      * @OA\Get(
@@ -83,14 +82,14 @@ Flight::group('/api/tags', function() {
      *     )
      * )
      */
-    Flight::route("GET /name/@name", function ($name) {
+    public static function getByName($name) {
         $response = Flight::tag_service()->get_by_name($name);
         if ($response['success']) {
             Flight::json($response['data']);
         } else {
             Flight::halt(404, $response['error']);
         }
-    });
+    }
 
     /**
      * @OA\Post(
@@ -117,7 +116,7 @@ Flight::group('/api/tags', function() {
      *     )
      * )
      */
-    Flight::route("POST /", function () {
+    public static function create() {
         $data = Flight::request()->data->getData();
         $response = Flight::tag_service()->add($data);
         
@@ -126,7 +125,7 @@ Flight::group('/api/tags', function() {
         } else {
             Flight::halt(400, $response['error']);
         }
-    });
+    }
 
     /**
      * @OA\Put(
@@ -159,7 +158,7 @@ Flight::group('/api/tags', function() {
      *     )
      * )
      */
-    Flight::route("PUT /@id", function ($id) {
+    public static function update($id) {
         $data = Flight::request()->data->getData();
         $response = Flight::tag_service()->update($data, $id);
         
@@ -168,7 +167,7 @@ Flight::group('/api/tags', function() {
         } else {
             Flight::halt(404, $response['error']);
         }
-    });
+    }
 
     /**
      * @OA\Delete(
@@ -194,7 +193,7 @@ Flight::group('/api/tags', function() {
      *     )
      * )
      */
-    Flight::route("DELETE /@id", function ($id) {
+    public static function delete($id) {
         $response = Flight::tag_service()->delete($id);
         
         if ($response['success']) {
@@ -202,7 +201,16 @@ Flight::group('/api/tags', function() {
         } else {
             Flight::halt(404, $response['error']);
         }
-    });
+    }
+}
+
+Flight::group('/api/tags', function() {
+    Flight::route("GET /", [TagRoutes::class, 'getAll']);
+    Flight::route("GET /@id", [TagRoutes::class, 'getById']);
+    Flight::route("GET /name/@name", [TagRoutes::class, 'getByName']);
+    Flight::route("POST /", [TagRoutes::class, 'create']);
+    Flight::route("PUT /@id", [TagRoutes::class, 'update']);
+    Flight::route("DELETE /@id", [TagRoutes::class, 'delete']);
 });
 
 ?>
