@@ -1,8 +1,8 @@
 <?php
-require_once 'UserDao.php'; 
-require_once 'TrackDao.php'; 
-require_once 'PlaylistDao.php'; 
-require_once 'TagDao.php'; 
+require_once '../UserDao.php'; 
+require_once '../TrackDao.php'; 
+require_once '../PlaylistDao.php'; 
+require_once '../TagDao.php'; 
 
 $userDao = new UserDao();
 $allUsers = $userDao->getAll(); // Inherited from BaseDao

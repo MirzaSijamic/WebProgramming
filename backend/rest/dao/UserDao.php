@@ -16,5 +16,11 @@ class UserDao extends BaseDao {
         $stmt->execute();
         return $stmt->fetch();
     }
+
+    public function getUsers() {
+        $stmt = $this->connection->prepare("SELECT id, name, email, role FROM users");
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
 }
 ?>
