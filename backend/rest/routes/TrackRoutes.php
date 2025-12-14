@@ -1,9 +1,9 @@
 <?php
 
-class TrackRoutes {
+Flight::group('/tracks', function() {
     /**
      * @OA\Get(
-     *     path="/api/tracks",
+     *     path="/tracks",
      *     summary="Get all tracks",
      *     description="Retrieve a list of all tracks",
      *     tags={"tracks"},
@@ -18,14 +18,14 @@ class TrackRoutes {
      *     )
      * )
      */
-    public static function getAll() {
+    Flight::route("GET /", function() {
         $tracks = Flight::track_service()->get_all();
         Flight::json($tracks);
-    }
+    });
 
     /**
      * @OA\Get(
-     *     path="/api/tracks/{id}",
+     *     path="/tracks/{id}",
      *     summary="Get track by ID",
      *     description="Retrieve a specific track with playlists that contain it",
      *     tags={"tracks"},
@@ -48,18 +48,18 @@ class TrackRoutes {
      *     )
      * )
      */
-    public static function getById($id) {
+    Flight::route("GET /@id", function($id) {
         $response = Flight::track_service()->get_by_id($id);
         if ($response['success']) {
             Flight::json($response['data']);
         } else {
             Flight::halt(404, $response['error']);
         }
-    }
+    });
 
     /**
      * @OA\Get(
-     *     path="/api/tracks/spotify/{spotifyTrackId}",
+     *     path="/tracks/spotify/{spotifyTrackId}",
      *     summary="Get track by Spotify ID",
      *     description="Retrieve a track by its Spotify track ID",
      *     tags={"tracks"},
@@ -82,18 +82,18 @@ class TrackRoutes {
      *     )
      * )
      */
-    public static function getBySpotifyId($spotifyTrackId) {
+    Flight::route("GET /spotify/@spotifyTrackId", function($spotifyTrackId) {
         $response = Flight::track_service()->get_by_spotify_id($spotifyTrackId);
         if ($response['success']) {
             Flight::json($response['data']);
         } else {
             Flight::halt(404, $response['error']);
         }
-    }
+    });
 
     /**
      * @OA\Post(
-     *     path="/api/tracks",
+     *     path="/tracks",
      *     summary="Create a new track",
      *     description="Create a new track",
      *     tags={"tracks"},
@@ -122,7 +122,7 @@ class TrackRoutes {
      *     )
      * )
      */
-    public static function create() {
+    Flight::route("POST /", function() {
         $data = Flight::request()->data->getData();
         $response = Flight::track_service()->add($data);
         
@@ -131,11 +131,11 @@ class TrackRoutes {
         } else {
             Flight::halt(400, $response['error']);
         }
-    }
+    });
 
     /**
      * @OA\Put(
-     *     path="/api/tracks/{id}",
+     *     path="/tracks/{id}",
      *     summary="Update a track",
      *     description="Update an existing track",
      *     tags={"tracks"},
@@ -167,7 +167,7 @@ class TrackRoutes {
      *     )
      * )
      */
-    public static function update($id) {
+    Flight::route("PUT /@id", function($id) {
         $data = Flight::request()->data->getData();
         $response = Flight::track_service()->update($data, $id);
         
@@ -176,11 +176,11 @@ class TrackRoutes {
         } else {
             Flight::halt(404, $response['error']);
         }
-    }
+    });
 
     /**
      * @OA\Delete(
-     *     path="/api/tracks/{id}",
+     *     path="/tracks/{id}",
      *     summary="Delete a track",
      *     description="Delete a track by ID",
      *     tags={"tracks"},
@@ -202,7 +202,7 @@ class TrackRoutes {
      *     )
      * )
      */
-    public static function delete($id) {
+    Flight::route("DELETE /@id", function($id) {
         $response = Flight::track_service()->delete($id);
         
         if ($response['success']) {
@@ -210,16 +210,7 @@ class TrackRoutes {
         } else {
             Flight::halt(404, $response['error']);
         }
-    }
-}
-
-Flight::group('/api/tracks', function() {
-    Flight::route("GET /", [TrackRoutes::class, 'getAll']);
-    Flight::route("GET /@id", [TrackRoutes::class, 'getById']);
-    Flight::route("GET /spotify/@spotifyTrackId", [TrackRoutes::class, 'getBySpotifyId']);
-    Flight::route("POST /", [TrackRoutes::class, 'create']);
-    Flight::route("PUT /@id", [TrackRoutes::class, 'update']);
-    Flight::route("DELETE /@id", [TrackRoutes::class, 'delete']);
+    });
 });
 
 ?>

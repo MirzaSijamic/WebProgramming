@@ -11,22 +11,24 @@ class UserService extends BaseService {
         parent::__construct($this->userDao);
     }
 
-    public function addUser($user) {
+    public function addUser($entity) {
 
         if (empty($entity['email']) || empty($entity['password'])) {
             return ['success' => false, 'error' => 'Email and password are required.'];
         }
 
-        $email_exists = $this->auth_dao->get_user_by_email($entity['email']);
+        $email_exists = $this->userDao->getByEmail($entity['email']);
         if($email_exists){
             return ['success' => false, 'error' => 'Email already registered.'];
         }
 
-        $entity['password'] = password_hash($entity['password'], PASSWORD_BCRYPT);
+        $entity['password_hash'] = password_hash($entity['password'], PASSWORD_BCRYPT);
+        unset($entity['password']);
 
         $entity = parent::add($entity);
-
-        unset($entity['password']);
+        if (isset($entity['password_hash'])) {
+            unset($entity['password_hash']);
+        }
         
         return ['success' => true, 'data' => $entity];  
     }
@@ -50,7 +52,8 @@ class UserService extends BaseService {
 
         // Handle password hashing if password is being updated
         if (isset($user['password']) && !empty($user['password'])) {
-            $user['password'] = password_hash($user['password'], PASSWORD_BCRYPT);
+            $user['password_hash'] = password_hash($user['password'], PASSWORD_BCRYPT);
+            unset($user['password']);
         } else {
             // Don't update password if not provided
             unset($user['password']);
