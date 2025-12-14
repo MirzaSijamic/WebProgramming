@@ -43,7 +43,7 @@ class UserService extends BaseService {
     }
 
     public function deleteUser($user_id) {
-        $this->userDao->deleteUser($user_id);
+        return $this->userDao->deleteUser($user_id);
     }
 
     public function editUser($user) {
@@ -59,7 +59,7 @@ class UserService extends BaseService {
             unset($user['password']);
         }
 
-        $this->userDao->editUser($user_id, $user);
+        return $this->userDao->editUser($user_id, $user);
     }
 
     // Additional method for authentication

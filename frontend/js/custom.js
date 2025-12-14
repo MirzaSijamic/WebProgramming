@@ -42,6 +42,25 @@ $(document).ready(function () {
     }
   });
 
+  // ensure SPA route ready hooks call our centralized init functions
+  app.route({
+    view: 'login',
+    load: 'login.html',
+    onReady: function() { console.debug('custom.js: login route onReady'); if(window.AppFunctions && typeof window.AppFunctions.initLogin === 'function') window.AppFunctions.initLogin(); }
+  });
+
+  app.route({
+    view: 'register',
+    load: 'register.html',
+    onReady: function() { console.debug('custom.js: register route onReady'); if(window.AppFunctions && typeof window.AppFunctions.initRegister === 'function') window.AppFunctions.initRegister(); }
+  });
+
+  app.route({
+    view: 'admin',
+    load: 'admin.html',
+    onReady: function() { console.debug('custom.js: admin route onReady'); if(window.AppFunctions && typeof window.AppFunctions.initAdmin === 'function') window.AppFunctions.initAdmin(); }
+  });
+
   // run app
   app.run();
 

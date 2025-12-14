@@ -22,5 +22,21 @@ class UserDao extends BaseDao {
         $stmt->execute();
         return $stmt->fetchAll();
     }
+
+    public function getUserByID($id) {
+        $stmt = $this->connection->prepare("SELECT id, name, email, role FROM users WHERE id = :id");
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
+    public function editUser($id, $data) {
+        // Leverage BaseDao->update to perform the update
+        return $this->update($data, $id);
+    }
+
+    public function deleteUser($id) {
+        return $this->delete($id);
+    }
 }
 ?>
