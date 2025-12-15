@@ -317,6 +317,58 @@
     });
   }
 
+  function initPlaylist(){
+    var $area = $('.row.playlist-area');
+    if (!$area.length) return;
+    console.log('initPlaylist: loading playlists for current user');
+
+    var userStr = localStorage.getItem('user');
+    if (!userStr) {
+      console.warn('initPlaylist: no localStorage.user found — attempting to load all playlists for debug');
+      ajaxWithFallback({ path: '/playlists', ajaxOpts: { method: 'GET', dataType: 'json' }, success: function(resp){
+        var playlists = resp.data || resp || [];
+        if (!Array.isArray(playlists)) playlists = [playlists];
+        $area.empty();
+        playlists.forEach(function(p, idx){
+          var img = p.image || ('img/playlist/' + (((idx)%15)+1) + '.jpg');
+          var title = p.title || p.name || 'Untitled';
+          var cssClass = 'mix col-lg-3 col-md-4 col-sm-6 genres';
+          var html = '<div class="'+cssClass+'">' +
+                     '<div class="playlist-item">' +
+                       '<img src="'+img+'" alt="">' +
+                       '<h5>'+escapeHtml(title)+'</h5>' +
+                     '</div>' +
+                   '</div>';
+          $area.append(html);
+        });
+      }, error: function(err){ console.error('initPlaylist fallback load failed', err); showAlert('.playlist-section', 'Failed to load playlists', 'danger'); } });
+      return;
+    }
+
+    var user = {};
+    try { user = JSON.parse(userStr); } catch(e){ user = {}; }
+    var userId = user.id || user.user_id || null;
+    if (!userId) { showAlert('.playlist-section', 'Unable to determine logged-in user id', 'warning'); return; }
+
+    ajaxWithFallback({ path: '/playlists/user/' + encodeURIComponent(userId), ajaxOpts: { method: 'GET', dataType: 'json' }, success: function(resp){
+      var playlists = resp.data || resp || [];
+      if (!Array.isArray(playlists)) playlists = [playlists];
+      $area.empty();
+      playlists.forEach(function(p, idx){
+        var img = p.image || ('img/playlist/' + (((idx)%15)+1) + '.jpg');
+        var title = p.title || p.name || 'Untitled';
+        var cssClass = 'mix col-lg-3 col-md-4 col-sm-6 genres';
+        var html = '<div class="'+cssClass+'">' +
+                   '<div class="playlist-item">' +
+                     '<img src="'+img+'" alt="">' +
+                     '<h5>'+escapeHtml(title)+'</h5>' +
+                   '</div>' +
+                 '</div>';
+        $area.append(html);
+      });
+    }, error: function(err){ console.error('initPlaylist: failed to load playlists', err); showAlert('.playlist-section', 'Failed to load playlists from server', 'danger'); } });
+  }
+
   function handleRoute(hash){
     var clean = (hash || window.location.hash || '').replace(/^#/,'');
     if (!clean) clean = 'home';
@@ -324,6 +376,7 @@
     if (clean === 'register') initRegister();
     if (clean === 'admin') initAdmin();
     if (clean === 'category') initCategory();
+    if (clean === 'playlist') initPlaylist();
   }
 
   $(function(){
@@ -339,6 +392,7 @@
     initRegister: initRegister,
     initAdmin: initAdmin
     ,initCategory: initCategory
+    ,initPlaylist: initPlaylist
   };
 
   // simple HTML escaper to avoid injecting raw values

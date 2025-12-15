@@ -38,6 +38,7 @@ $(document).ready(function () {
   app.route({
     view: "playlist",
     load: "playlist.html",
+    onReady: function() { console.debug('custom.js: playlist route onReady'); if(window.AppFunctions && typeof window.AppFunctions.initPlaylist === 'function') window.AppFunctions.initPlaylist(); }
   });
 
   app.route({
