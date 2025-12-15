@@ -270,12 +270,60 @@
     });
   }
 
+  function initCategory(){
+    var $container = $('.songs-section .container');
+    if (!$container.length) return;
+    console.log('initCategory: loading tracks from backend');
+
+    // add a visible loader so user sees activity
+    var $loader = $container.find('.category-loading');
+    if (!$loader.length) { $loader = $('<div class="category-loading" style="padding:14px; text-align:center;">Loading tracks…</div>'); $container.prepend($loader); }
+
+    ajaxWithFallback({
+      path: '/tracks',
+      ajaxOpts: { method: 'GET', dataType: 'json' },
+      success: function(resp){
+        $loader.remove();
+        var tracks = resp.data || resp || [];
+        if (!Array.isArray(tracks)) tracks = [tracks];
+
+        // remove existing song-item blocks only when we have real data
+        if (tracks.length) {
+          $container.find('.song-item').remove();
+        }
+
+        var $pagination = $container.find('.site-pagination');
+        tracks.forEach(function(t, idx){
+          var artists = t.artists || t.artist || 'Unknown';
+          var title = t.name || t.title || 'Untitled';
+          var img = t.image || ('img/songs/' + ((idx%8)+1) + '.jpg');
+          var preview = t.preview_url || t.external_url || 'music-files/1.mp3';
+          var jpAncestor = '.jp_container_cat_' + idx;
+
+          var html = '\n<div class="song-item">\n  <div class="row">\n    <div class="col-lg-4">\n      <div class="song-info-box">\n        <img src="'+img+'" alt="">\n        <div class="song-info">\n          <h4>'+escapeHtml(artists)+'</h4>\n          <p>'+escapeHtml(title)+'</p>\n        </div>\n      </div>\n    </div>\n    <div class="col-lg-6">\n      <div class="single_player_container">\n        <div class="single_player">\n          <div class="jp-jplayer jplayer" data-ancestor="'+jpAncestor+'" data-url="'+preview+'"></div>\n          <div class="jp-audio '+jpAncestor.replace('.', '').trim()+'" role="application" aria-label="media player">\n            <div class="jp-gui jp-interface">\n              <div class="player_controls_box">\n                <button class="jp-prev player_button" tabindex="0"></button>\n                <button class="jp-play player_button" tabindex="0"></button>\n                <button class="jp-next player_button" tabindex="0"></button>\n                <button class="jp-stop player_button" tabindex="0"></button>\n              </div>\n              <div class="player_bars">\n                <div class="jp-progress">\n                  <div class="jp-seek-bar">\n                    <div>\n                      <div class="jp-play-bar"><div class="jp-current-time" role="timer" aria-label="time">0:00</div></div>\n                    </div>\n                  </div>\n                </div>\n                <div class="jp-duration ml-auto" role="timer" aria-label="duration">00:00</div>\n              </div>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n    <div class="col-lg-2">\n      <div class="songs-links">\n        <a href=""><img src="img/icons/p-1.png" alt=""></a>\n        <a href=""><img src="img/icons/p-2.png" alt=""></a>\n        <a href=""><img src="img/icons/p-3.png" alt=""></a>\n      </div>\n    </div>\n  </div>\n</div>\n';
+
+          if ($pagination.length) {
+            $pagination.before(html);
+          } else {
+            $container.append(html);
+          }
+        });
+      },
+      error: function(err){
+        $loader.remove();
+        console.error('initCategory: failed to load tracks', err);
+        showAlert('.songs-section', 'Failed to load tracks from server', 'danger');
+      }
+    });
+  }
+
   function handleRoute(hash){
     var clean = (hash || window.location.hash || '').replace(/^#/,'');
     if (!clean) clean = 'home';
     if (clean === 'login') initLogin();
     if (clean === 'register') initRegister();
     if (clean === 'admin') initAdmin();
+    if (clean === 'category') initCategory();
   }
 
   $(function(){
@@ -290,6 +338,13 @@
     initLogin: initLogin,
     initRegister: initRegister,
     initAdmin: initAdmin
+    ,initCategory: initCategory
   };
+
+  // simple HTML escaper to avoid injecting raw values
+  function escapeHtml(text){
+    if (text === null || text === undefined) return '';
+    return String(text).replace(/[&<>"'`]/g, function(ch){ return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;', '`':'&#96;' }[ch]; });
+  }
 
 })(jQuery);
