@@ -1,0 +1,35 @@
+<!-- spapp partial: register.html - fragment loaded into main#spapp -->
+<style>
+.spapp-auth-card { background-color: #3b4252; border: 1px solid #444; padding: 18px; max-width: 460px; margin: 20px auto; }
+.spapp-auth-card .card-header, .spapp-auth-card .card-footer { background-color: #2e3440; color: white; padding: 10px; text-align: center; }
+.spapp-auth-card .form-control { background-color: #4c566a; color: whitesmoke; border: 1px solid white; }
+.spapp-auth-card .btn-primary { background-color: #5e81ac; border: none; }
+</style>
+
+<div>
+  <div class="spapp-auth-card">
+    <div class="card-header"><h4>Register</h4></div>
+    <div class="card-body">
+      <form id="registerForm">
+        <div class="mb-3">
+          <label for="registerUsername" class="form-label">Username</label>
+          <input type="text" class="form-control" id="registerUsername" placeholder="Enter a username" required>
+        </div>
+        <div class="mb-3">
+          <label for="registerEmail" class="form-label">Email address</label>
+          <input type="email" class="form-control" id="registerEmail" placeholder="Enter your email" required>
+        </div>
+        <div class="mb-3">
+          <label for="registerPassword" class="form-label">Password</label>
+          <input type="password" class="form-control" id="registerPassword" placeholder="Enter your password" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Register</button>
+      </form>
+    </div>
+    <div class="card-footer">
+      <p>Already have an account? <a href="#login" class="other-link">Login here</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- register logic centralized in js/functions.js -->

@@ -83,6 +83,7 @@ foreach ($filesToScan as $file) {
             // Ignore execution errors
         }
     }
+
 }
 ob_end_clean();
 
@@ -102,4 +103,5 @@ header('Pragma: no-cache');
 header('Expires: 0');
 
 echo $openapi->toJson();
+?>
 ?>

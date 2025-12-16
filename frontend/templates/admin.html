@@ -1,0 +1,143 @@
+<!-- spapp partial: admin.html - Admin dashboard managing users -->
+
+<div class="container mt-3">
+  <h2>Admin Dashboard — Users</h2>
+  <table id="usersTable" class="display" style="width:100%">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<!-- Edit user modal -->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editUserForm">
+          <input type="hidden" id="editUserId">
+          <div class="mb-3">
+            <label for="editUserName" class="form-label">Name</label>
+            <input type="text" id="editUserName" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="editUserEmail" class="form-label">Email</label>
+            <input type="email" id="editUserEmail" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="editUserRole" class="form-label">Role</label>
+            <select id="editUserRole" class="form-select">
+              <option value="user">user</option>
+              <option value="admin">admin</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="editUserPassword" class="form-label">New Password (leave empty to keep)</label>
+            <input type="password" id="editUserPassword" class="form-control">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" id="saveUserBtn" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--
+<script>
+  $(function() {
+    var table = $('#usersTable').DataTable({
+      columns: [
+        { data: 'id' },
+        { data: 'name' },
+        { data: 'email' },
+        { data: 'role' },
+        { data: null, orderable: false }
+      ],
+      pageLength: 10
+    });
+
+    function loadUsers() {
+      $.ajax({ url: '../backend/users', method: 'GET', dataType: 'json' })
+        .done(function(resp) {
+          
+          var users = resp.data || resp;
+          table.clear();
+          users.forEach(function(u) {
+            table.row.add($.extend({}, u, { 
+              DT_ACTIONS: true
+            }));
+
+          });
+          table.draw();
+
+          $('#usersTable tbody tr').each(function() {
+            var $tr = $(this);
+            var data = table.row($tr).data();
+            var actions = '<button class="btn btn-sm btn-primary btn-edit me-1" data-id="'+data.id+'">Update</button>' +
+                          '<button class="btn btn-sm btn-danger btn-delete" data-id="'+data.id+'">Delete</button>';
+            $tr.find('td').last().html(actions);
+          });
+        }).fail(function() { alert('Failed to load users'); });
+    }
+
+    // initial load
+    loadUsers();
+
+    // handle delete
+    $('#usersTable').on('click', '.btn-delete', function() {
+      var id = $(this).data('id');
+      if (!confirm('Delete user ID ' + id + '?')) return;
+      $.ajax({ url: '../backend/users/' + id, method: 'DELETE' })
+        .done(function() { alert('Deleted'); loadUsers(); })
+        .fail(function(xhr) { alert('Delete failed: ' + (xhr.responseJSON && xhr.responseJSON.error ? xhr.responseJSON.error : xhr.statusText)); });
+    });
+
+    // handle edit - open modal with user data
+    $('#usersTable').on('click', '.btn-edit', function() {
+      var id = $(this).data('id');
+      $.ajax({ url: '../backend/users/' + id, method: 'GET', dataType: 'json' })
+        .done(function(resp) {
+          var user = resp.data || resp;
+          $('#editUserId').val(user.id);
+          $('#editUserName').val(user.name || '');
+          $('#editUserEmail').val(user.email || '');
+          $('#editUserRole').val(user.role || 'user');
+          $('#editUserPassword').val('');
+          var modal = new bootstrap.Modal(document.getElementById('editUserModal'));
+          modal.show();
+        }).fail(function() { alert('Failed to fetch user'); });
+    });
+
+    // save changes
+    $('#saveUserBtn').on('click', function() {
+      var id = $('#editUserId').val();
+      var payload = {
+        name: $('#editUserName').val(),
+        email: $('#editUserEmail').val(),
+        role: $('#editUserRole').val()
+      };
+      var pwd = $('#editUserPassword').val();
+      if (pwd) payload.password = pwd;
+
+      $.ajax({ url: '../backend/users/' + id, method: 'PUT', contentType: 'application/json', data: JSON.stringify(payload) })
+        .done(function() { alert('Saved'); $('#editUserModal').modal('hide'); loadUsers(); })
+        .fail(function(xhr) { alert('Update failed: ' + (xhr.responseJSON && xhr.responseJSON.error ? xhr.responseJSON.error : xhr.statusText)); });
+    });
+
+  });
+</script>
+-->
