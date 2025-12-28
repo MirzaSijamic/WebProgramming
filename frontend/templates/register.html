@@ -13,15 +13,15 @@
       <form id="registerForm">
         <div class="mb-3">
           <label for="registerUsername" class="form-label">Username</label>
-          <input type="text" class="form-control" id="registerUsername" placeholder="Enter a username" required>
+          <input type="text" class="form-control" id="registerUsername" name="registerUsername" placeholder="Enter a username" minlength="2" required>
         </div>
         <div class="mb-3">
           <label for="registerEmail" class="form-label">Email address</label>
-          <input type="email" class="form-control" id="registerEmail" placeholder="Enter your email" required>
+          <input type="email" class="form-control" id="registerEmail" name="registerEmail" placeholder="Enter your email" required>
         </div>
         <div class="mb-3">
           <label for="registerPassword" class="form-label">Password</label>
-          <input type="password" class="form-control" id="registerPassword" placeholder="Enter your password" required>
+          <input type="password" class="form-control" id="registerPassword" name="registerPassword" placeholder="Enter your password" minlength="6" required>
         </div>
         <button type="submit" class="btn btn-primary w-100">Register</button>
       </form>

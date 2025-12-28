@@ -2,7 +2,7 @@
    - stores/reads token and user from localStorage
    - sets Authorization header for jQuery AJAX
    - updates header user-panel with login/register or username/logout/admin links
-*/
+
 (function(window, $){
   'use strict';
 
@@ -71,3 +71,4 @@
   };
 
 })(window, window.jQuery);
+*/

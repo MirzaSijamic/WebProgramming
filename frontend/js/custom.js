@@ -59,13 +59,19 @@ $(document).ready(function () {
   app.route({
     view: 'login',
     load: 'login.html',
-    onReady: function() { console.debug('custom.js: login route onReady'); if(window.AppFunctions && typeof window.AppFunctions.initLogin === 'function') window.AppFunctions.initLogin(); }
+    onReady: function() { 
+      console.debug('custom.js: login route onReady'); 
+      UserService.setupLoginValidation();
+    }
   });
 
   app.route({
     view: 'register',
     load: 'register.html',
-    onReady: function() { console.debug('custom.js: register route onReady'); if(window.AppFunctions && typeof window.AppFunctions.initRegister === 'function') window.AppFunctions.initRegister(); }
+    onReady: function() { 
+      console.debug('custom.js: register route onReady'); 
+      UserService.setupRegisterValidation();
+    }
   });
 
   app.route({
