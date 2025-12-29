@@ -23,15 +23,8 @@ $(document).ready(function () {
     load: "category.html",
     onReady: function() {
       console.debug('custom.js: category route onReady');
-      try{
-        var $sec = $('#category');
-        console.debug('category section exists:', $sec.length, 'visible:', $sec.is(':visible'));
-        // force visible and add debug outline so it's easy to spot
-        $sec.show().css({ 'display':'block', 'visibility':'visible', 'opacity':1, 'outline':'3px dashed rgba(255,0,0,0.9)', 'background':'#fff' });
-        console.debug('category HTML snippet:', ($sec.html()||'').slice(0,300));
-      }catch(e){ console.error('category onReady debug error', e); }
-      if(window.AppFunctions && typeof window.AppFunctions.initCategory === 'function') window.AppFunctions.initCategory();
-      setTimeout(function(){ try{ console.debug('post-init category HTML length:', ($('#category').html()||'').length); }catch(e){} }, 800);
+      var $sec = $('#category');
+      console.debug('category section exists:', $sec.length, 'visible:', $sec.is(':visible'));
     }
   });
 
@@ -59,13 +52,19 @@ $(document).ready(function () {
   app.route({
     view: 'login',
     load: 'login.html',
-    onReady: function() { console.debug('custom.js: login route onReady'); if(window.AppFunctions && typeof window.AppFunctions.initLogin === 'function') window.AppFunctions.initLogin(); }
+    onReady: function() { 
+      console.debug('custom.js: login route onReady'); 
+      UserService.setupLoginValidation();
+    }
   });
 
   app.route({
     view: 'register',
     load: 'register.html',
-    onReady: function() { console.debug('custom.js: register route onReady'); if(window.AppFunctions && typeof window.AppFunctions.initRegister === 'function') window.AppFunctions.initRegister(); }
+    onReady: function() { 
+      console.debug('custom.js: register route onReady'); 
+      UserService.setupRegisterValidation();
+    }
   });
 
   app.route({
