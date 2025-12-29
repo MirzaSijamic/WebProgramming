@@ -232,27 +232,26 @@ var UserService = {
     try {
       var idx = pathname.indexOf("/frontend");
       if (idx !== -1) {
-        candidates.push(pathname.substring(0, idx) + "/backend/");
+        candidates.push(pathname.substring(0, idx) + "/webprogramming-backend/");
       }
     } catch (e) {}
 
     try {
       var removed = pathname.replace(/\/[^\/]*$/, "");
       if (removed && removed !== pathname) {
-        candidates.push(removed + "/backend/");
+        candidates.push(removed + "/webprogramming-backend/");
       }
     } catch (e) {}
 
-    candidates.push("/WebProgramming/WebProgramming/backend/");
-    candidates.push("/WebProgramming/backend/");
-    candidates.push("/backend/");
+    candidates.push("/webprogramming-backend/");
+    
 
     // Return the first candidate
     if (candidates.length > 0) {
       return candidates[0];
     }
 
-    return "/backend/";
+    return "/webprogramming-backend/";
   },
 
   // Get user from localStorage
