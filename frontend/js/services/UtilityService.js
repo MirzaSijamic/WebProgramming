@@ -16,15 +16,15 @@ var UtilityService = {
     var candidates = [];
     try {
       var idx = p.indexOf('/frontend');
-      if (idx !== -1) candidates.push(p.substring(0, idx) + '/backend');
+      if (idx !== -1) candidates.push(p.substring(0, idx) + '/webprogramming-backend');
     } catch (e) {}
     try {
       var removed = p.replace(/\/[^\/]*$/, '');
-      if (removed && removed !== p) candidates.push(removed + '/backend');
+      if (removed && removed !== p) candidates.push(removed + '/webprogramming-backend');
     } catch (e) {}
-    candidates.push('/WebProgramming/WebProgramming/backend');
-    candidates.push('/WebProgramming/backend');
-    candidates.push('/backend');
+    candidates.push('/webprogramming-backend');
+    //candidates.push('/WebProgramming/backend');
+    //candidates.push('/backend');
     var seen = {};
     return candidates
       .map(function(c) {
